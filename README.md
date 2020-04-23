@@ -28,7 +28,7 @@ for(MALApp *app in allApps)
 /* Suspect a new app has been installed? Running a daemon and want to refresh periodically? */
 [[MAList sharedInstance] refresh];
 
-*allApps = [MAList apps];
+allApps = [MAList apps];
 for(MALApp *app in allApps)
   NSLog(@"%@", app.title);
 ```
