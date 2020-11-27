@@ -24,22 +24,10 @@
 @implementation MAList
 
 - (NSString*)getDbPath {
-    NSPipe *pipe = [NSPipe pipe];
-    NSFileHandle *file = pipe.fileHandleForReading;
-    
-    NSTask *task = [[NSTask alloc] init];
-    task.launchPath = @"/usr/bin/getconf";
-    task.arguments = @[@"DARWIN_USER_DIR"];
-    task.standardOutput = pipe;
-    
-    [task launch];
-    
-    NSData *data = [file readDataToEndOfFile];
-    [file closeFile];
-    
-    NSString *grepOutput = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
-    grepOutput = [grepOutput stringByReplacingOccurrencesOfString:@"\n" withString:@""];
-    return [grepOutput stringByAppendingString:@"com.apple.dock.launchpad/db/db"];
+    char icon_cache_path[1024];
+    confstr(_CS_DARWIN_USER_DIR, icon_cache_path, 1024);
+    strcat(icon_cache_path, "com.apple.dock.launchpad/db/db");
+    return [NSString stringWithUTF8String:icon_cache_path];
 }
 
 - (BOOL)createAppList {
